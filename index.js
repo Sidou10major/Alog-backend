@@ -38,9 +38,10 @@ const logActivity = (activity) => {
 app.post('/register', async (req, res) => {
   try {
     const { username, password } = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10);
+    console.log(username,password)
+    //const hashedPassword = await bcrypt.hash(password, 10);
     await prisma.user.create({
-      data: { username, password: hashedPassword },
+      data: { username, password },
     });
     res.status(201).json({ message: 'User registered successfully' });
   } catch (error) {
