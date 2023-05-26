@@ -2,10 +2,38 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { PrismaClient } = require('@prisma/client');
+const fs = require('fs');
+const crypto = require('crypto');
 
 const prisma = new PrismaClient();
 const app = express();
 app.use(express.json());
+
+// Encrypt function using AES
+const encrypt = (text, key) => {
+  const cipher = crypto.createCipher('aes-256-cbc', key);
+  let encrypted = cipher.update(text, 'utf8', 'hex');
+  encrypted += cipher.final('hex');
+  return encrypted;
+};
+
+// Decrypt function using AES
+const decrypt = (encryptedText, key) => {
+  const decipher = crypto.createDecipher('aes-256-cbc', key);
+  let decrypted = decipher.update(encryptedText, 'hex', 'utf8');
+  decrypted += decipher.final('utf8');
+  return decrypted;
+};
+
+// Log activity function
+const logActivity = (activity) => {
+  const logEntry = `${new Date().toISOString()} - ${activity}\n`;
+  fs.appendFile('activity.log', logEntry, (err) => {
+    if (err) {
+      console.error('Failed to log activity:', err);
+    }
+  });
+};
 
 app.post('/register', async (req, res) => {
   try {
@@ -33,6 +61,7 @@ app.post('/login', async (req, res) => {
     }
     const token = jwt.sign({ userId: user.id }, 'secretKey'); // Replace 'secretKey' with your own secret key
     res.json({ token });
+    logActivity(`User '${username}' logged in`);
   } catch (error) {
     res.status(500).json({ error: 'Failed to login' });
   }
@@ -60,6 +89,7 @@ app.post('/documents', async (req, res) => {
       data: { title, content },
     });
     res.status(201).json({ document });
+    logActivity(`Document '${title}' created`);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to create document' });
@@ -75,6 +105,7 @@ app.put('/documents/:id', async (req, res) => {
       data: { title, content },
     });
     res.json({ document: updatedDocument });
+    logActivity(`Document '${title}' updated`);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to update document' });
@@ -88,6 +119,7 @@ app.delete('/documents/:id', async (req, res) => {
       where: { id: Number(id) },
     });
     res.json({ message: 'Document deleted successfully' });
+    logActivity(`Document with ID '${id}' deleted`);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to delete document' });
@@ -121,6 +153,7 @@ app.post('/patients', async (req, res) => {
       data: { name, age, email },
     });
     res.status(201).json({ patient });
+    logActivity(`Patient '${name}' created`);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to create patient' });
@@ -136,6 +169,7 @@ app.put('/patients/:id', async (req, res) => {
       data: { name, age, email },
     });
     res.json({ patient: updatedPatient });
+    logActivity(`Patient with ID '${id}' updated`);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to update patient' });
@@ -149,6 +183,7 @@ app.delete('/patients/:id', async (req, res) => {
       where: { id: parseInt(id) },
     });
     res.json({ message: 'Patient deleted successfully' });
+    logActivity(`Patient with ID '${id}' deleted`);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to delete patient' });
@@ -167,11 +202,12 @@ app.get('/rendezvous', async (req, res) => {
 
 app.post('/rendezvous', async (req, res) => {
   try {
-    const { patientId, date, reason } = req.body;
+    const { patientId, datetime } = req.body;
     const rendezvous = await prisma.rendezvous.create({
-      data: { patientId, date, reason },
+      data: { patientId: parseInt(patientId), datetime },
     });
     res.status(201).json({ rendezvous });
+    logActivity(`Rendezvous with ID '${rendezvous.id}' created`);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to create rendezvous' });
@@ -181,12 +217,13 @@ app.post('/rendezvous', async (req, res) => {
 app.put('/rendezvous/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { patientId, date, reason } = req.body;
+    const { patientId, datetime } = req.body;
     const updatedRendezvous = await prisma.rendezvous.update({
       where: { id: parseInt(id) },
-      data: { patientId, date, reason },
+      data: { patientId: parseInt(patientId), datetime },
     });
     res.json({ rendezvous: updatedRendezvous });
+    logActivity(`Rendezvous with ID '${id}' updated`);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to update rendezvous' });
@@ -200,14 +237,13 @@ app.delete('/rendezvous/:id', async (req, res) => {
       where: { id: parseInt(id) },
     });
     res.json({ message: 'Rendezvous deleted successfully' });
+    logActivity(`Rendezvous with ID '${id}' deleted`);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to delete rendezvous' });
   }
 });
 
-
-const port = 3000; // Choose a port number
-app.listen(port, () => {
-  console.log(`Server listening on port ${port}`);
+app.listen(3000, () => {
+  console.log('Server is running on port 3000');
 });

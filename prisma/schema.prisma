@@ -9,8 +9,54 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
 model User {
+  id       Int    @id @default(autoincrement())
+  username String @unique
+  password String
+}
+
+model Document {
+  id      Int     @id @default(autoincrement())
+  title   String
+  content String?
+}
+
+model Patient {
+  id         Int              @id @default(autoincrement())
+  name       String
+  age        Int
+  email      String
+  doctors    DoctorPatients[]
+  Rendezvous Rendezvous[]
+}
+
+model Doctor {
+  id         Int              @id @default(autoincrement())
+  firstname  String
+  familyname String
+  field      String
+  department String
+  patients   DoctorPatients[]
+  Rendezvous Rendezvous[]
+}
+
+model DoctorPatients {
+  doc     Doctor  @relation(fields: [docid], references: [id])
+  docid   Int
+  patient Patient @relation(fields: [patid], references: [id])
+  patid   Int
+
+  @@id([docid, patid])
+}
+
+model Rendezvous {
   id        Int      @id @default(autoincrement())
-  username  String   @unique
-  password  String
+  patientId Int
+  doctorId  Int
+  date      DateTime
+  reason    String
+
+  patient Patient @relation(fields: [patientId], references: [id])
+  doctor  Doctor  @relation(fields: [doctorId], references: [id])
 }

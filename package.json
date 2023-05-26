@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "test",
-    "start" : "node index.js"
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -19,7 +19,9 @@
   "homepage": "https://github.com/Sidou10major/Alog-backend#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "crypto": "^1.0.1",
     "express": "^4.18.2",
+    "fs": "^0.0.1-security",
     "jsonwebtoken": "^9.0.0"
   }
 }
