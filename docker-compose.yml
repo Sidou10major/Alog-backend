@@ -1,0 +1,35 @@
+services:
+  mysqldb:
+    image: mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_DATABASE: 'projet_alog'
+      MYSQL_DEFAULT_AUTHENTICATION_PLUGIN: mysql_native_password
+    # ports:
+    #   - 3306:3306
+    networks:
+      - app-network
+    # volumes:
+    #   - db:/var/lib/mysql 
+  app:
+    depends_on: 
+      - mysqldb
+    build: .
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: 'projet_alog'
+      MYSQL_USER: 'root'
+      MYSQL_PASSWORD: 'root'
+      MYSQL_HOST: mysqldb
+    ports:
+      - 8000:3000
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+# volumes:
+#   db:
