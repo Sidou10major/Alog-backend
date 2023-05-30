@@ -1,5 +1,5 @@
-const prisma = require("./prismaClient");
-const logActivity = require("./logController");
+// const prisma = require("./prismaClient");
+// const logActivity = require("./logController");
 const con = require("../../connection");
 
 
@@ -48,35 +48,35 @@ const addPatient = async (req, res) => {
     })
 }
 
-const deletePatient = async (req, res) => {
-    try {
-        const { id } = req.params;
-        await prisma.patient.delete({
-            where: { id: parseInt(id) },
-        });
-        res.json({ message: 'Patient deleted successfully' });
-        logActivity(`Patient with ID '${id}' deleted`);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Failed to delete patient' });
-    }
-}
+// const deletePatient = async (req, res) => {
+//     try {
+//         const { id } = req.params;
+//         await prisma.patient.delete({
+//             where: { id: parseInt(id) },
+//         });
+//         res.json({ message: 'Patient deleted successfully' });
+//         logActivity(`Patient with ID '${id}' deleted`);
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ error: 'Failed to delete patient' });
+//     }
+// }
 
-const updatePatient = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const { name, age, email } = req.body;
-        const updatedPatient = await prisma.patient.update({
-            where: { id: parseInt(id) },
-            data: { name, age, email },
-        });
-        res.json({ patient: updatedPatient });
-        logActivity(`Patient with ID '${id}' updated`);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Failed to update patient' });
-    }
-}
+// const updatePatient = async (req, res) => {
+//     try {
+//         const { id } = req.params;
+//         const { name, age, email } = req.body;
+//         const updatedPatient = await prisma.patient.update({
+//             where: { id: parseInt(id) },
+//             data: { name, age, email },
+//         });
+//         res.json({ patient: updatedPatient });
+//         logActivity(`Patient with ID '${id}' updated`);
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ error: 'Failed to update patient' });
+//     }
+// }
 
 
 const getPatientById = (req, res) => {
@@ -102,6 +102,6 @@ module.exports = {
     addPatient,
     getPatients,
     getPatientById,
-    updatePatient,
-    deletePatient
+    // updatePatient,
+    // deletePatient
 }

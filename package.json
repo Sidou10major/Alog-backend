@@ -19,14 +19,11 @@
   },
   "homepage": "https://github.com/Sidou10major/Alog-backend#readme",
   "dependencies": {
-    "@prisma/client": "^4.14.1",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "express": "^4.18.2",
-    "fs": "^0.0.1-security",
     "jsonwebtoken": "^9.0.0",
     "morgan": "^1.10.0",
-    "mysql": "^2.18.1",
     "mysql2": "^3.3.3"
   },
   "devDependencies": {

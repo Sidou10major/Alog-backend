@@ -1,5 +1,5 @@
-const prisma = require("./prismaClient");
-const logActivity = require("./logController");
+// const prisma = require("./prismaClient");
+// const logActivity = require("./logController");
 const con = require("../../connection");
 
 const updateDoc = async (req, res) => {
@@ -30,19 +30,19 @@ const updateDoc = async (req, res) => {
     });
 }
 
-const deleteDoc = async (req, res) => {
-    try {
-        const { id } = req.params;
-        await prisma.document.delete({
-            where: { id: Number(id) },
-        });
-        res.json({ message: 'Document deleted successfully' });
-        logActivity(`Document with ID '${id}' deleted`);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Failed to delete document' });
-    }
-}
+// const deleteDoc = async (req, res) => {
+//     try {
+//         const { id } = req.params;
+//         await prisma.document.delete({
+//             where: { id: Number(id) },
+//         });
+//         res.json({ message: 'Document deleted successfully' });
+//         logActivity(`Document with ID '${id}' deleted`);
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ error: 'Failed to delete document' });
+//     }
+// }
 
 const getDocsOfPatient = async (req, res) => {
     // try {
@@ -93,5 +93,5 @@ module.exports = {
     addDoc,
     getDocsOfPatient,
     updateDoc,
-    deleteDoc
+    // deleteDoc
 }

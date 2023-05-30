@@ -5,13 +5,13 @@ const app = express();
 const cors = require("cors");
 const morgan = require("morgan");
 const path = require("path");
-const authRouter = require("./src/routers/auth");
-const docRouter = require("./src/routers/documents");
-const patientRouter = require("./src/routers/patients");
-const doctorRouter = require("./src/routers/doctor");
+const authRouter = require("./src/routers/auth.js");
+const docRouter = require("./src/routers/documents.js");
+const patientRouter = require("./src/routers/patients.js");
+const doctorRouter = require("./src/routers/doctor.js");
 // const rdvRouter = require("./src/routers/rdv");
 
-const connection = require("./connection")
+const connection = require("./connection.js");
 
 
 
