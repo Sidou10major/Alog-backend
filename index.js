@@ -4,7 +4,6 @@ const fs = require("fs");
 const mysql = require("mysql2");
 const app = express();
 const cors = require("cors");
-const { query } = require("express");
 // const authRouter = require("./src/routers/auth");
 // const docRouter = require("./src/routers/documents");
 // const patientRouter = require("./src/routers/patients");
@@ -26,10 +25,12 @@ connection.connect((err) => {
 
 
 connection.query("create table if not exists test (id integer, name varchar(255))", (err, results, fields) => {
+  if(err) console.log(err);
   console.log("table creation done");
 });
 
 connection.query(`insert into test (id, name) values (1, "islam"), (2, "soufiane")`, (err, results, fields) => {
+  if(err) console.log(err);
   console.log("insert done");
 });
 
@@ -48,7 +49,8 @@ app.use(cors());
 
 app.get("/", (req, res) => {
   connection.query(`select * from test`, (err, results, fields) => {
-    console.log("rows:", res);
+    if(err) console.log(err);
+    console.log("send rows");
     res.json(results);
   });
 
