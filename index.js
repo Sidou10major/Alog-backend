@@ -6,7 +6,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 const path = require("path");
 const authRouter = require("./src/routers/auth");
-// const docRouter = require("./src/routers/documents");
+const docRouter = require("./src/routers/documents");
 const patientRouter = require("./src/routers/patients");
 const doctorRouter = require("./src/routers/doctor");
 // const rdvRouter = require("./src/routers/rdv");
@@ -33,7 +33,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use("/auth", authRouter);
-// app.use("/documents", docRouter);
+app.use("/documents", docRouter);
 app.use("/patients", patientRouter);
 app.use("/doctors", doctorRouter);
 // app.use("/rendezvous", rdvRouter);
