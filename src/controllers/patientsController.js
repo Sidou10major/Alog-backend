@@ -89,7 +89,7 @@ const getPatientById = (req, res) => {
             res.status(500).json({ message: "internal error" });
         } else {
             if(result.length === 0) {
-                res.status(404).json({ message: "user not found"});
+                res.status(404).json({ message: "patient not found"});
             } else {
                 res.json(result[0]);
             }

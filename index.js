@@ -8,6 +8,7 @@ const path = require("path");
 const authRouter = require("./src/routers/auth");
 // const docRouter = require("./src/routers/documents");
 const patientRouter = require("./src/routers/patients");
+const doctorRouter = require("./src/routers/doctor");
 // const rdvRouter = require("./src/routers/rdv");
 
 const connection = require("./connection")
@@ -34,6 +35,7 @@ app.use(cors());
 app.use("/auth", authRouter);
 // app.use("/documents", docRouter);
 app.use("/patients", patientRouter);
+app.use("/doctors", doctorRouter);
 // app.use("/rendezvous", rdvRouter);
 
 app.get("/", (req, res) => {
